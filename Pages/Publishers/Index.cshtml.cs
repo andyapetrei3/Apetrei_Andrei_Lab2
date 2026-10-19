@@ -1,23 +1,25 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Apetrei_Andrei_Lab2.Models;
 
-namespace Apetrei_Andrei_Lab2.Pages.PublisherPages;
-
-public class IndexModel : PageModel
+namespace Apetrei_Andrei_Lab2.Pages.Publishers
 {
-    private readonly Apetrei_Andrei_Lab2Context _context;
-
-    public IndexModel(Apetrei_Andrei_Lab2Context context)
+    public class IndexModel : PageModel
     {
-        _context = context;
-    }
+        private readonly Apetrei_Andrei_Lab2Context _context;
 
-    public IList<Publisher> Publisher { get; set; } = default!;
+        public IndexModel(Apetrei_Andrei_Lab2Context context)
+        {
+            _context = context;
+        }
 
-    public async Task OnGetAsync()
-    {
-        Publisher = await _context.Publisher.ToListAsync();
+        public IList<Publisher> Publisher { get; set; } = default!;
+
+        public async Task OnGetAsync()
+        {
+            Publisher = await _context.Publisher
+                .Include(p => p.Books)
+                .ToListAsync();
+        }
     }
 }

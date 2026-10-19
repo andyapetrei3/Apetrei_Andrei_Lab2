@@ -1,11 +1,11 @@
-@page
+@page "/"
 @model Apetrei_Andrei_Lab2.Pages.BookPages.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Books";
 }
 
-<h1>Index</h1>
+<h1>Books</h1>
 
 <p>
     <a asp-page="Create">Create New</a>
@@ -13,11 +13,12 @@
 <table class="table">
     <thead>
         <tr>
-            <th>@Html.DisplayNameFor(model => model.Book[0].Title)</th>
-            <th>@Html.DisplayNameFor(model => model.Book[0].Author.FirstName)</th>
-            <th>@Html.DisplayNameFor(model => model.Book[0].Price)</th>
-            <th>@Html.DisplayNameFor(model => model.Book[0].PublishingDate)</th>
-            <th>@Html.DisplayNameFor(model => model.Book[0].Publisher.PublisherName)</th>
+            <th>Book Title</th>
+            <th>Author</th>
+            <th>Price</th>
+            <th>Publishing Date</th>
+            <th>Publisher</th>
+            <th>Book Categories</th>
             <th></th>
         </tr>
     </thead>
@@ -27,12 +28,36 @@
             <tr>
                 <td>@Html.DisplayFor(modelItem => item.Title)</td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Author.FirstName)
-                    @Html.DisplayFor(modelItem => item.Author.LastName)
+                    @{
+                        if (item.Author != null)
+                        {
+                            @item.Author.LastName
+                            @: @item.Author.FirstName
+                        }
+                    }
                 </td>
                 <td>@Html.DisplayFor(modelItem => item.Price)</td>
                 <td>@Html.DisplayFor(modelItem => item.PublishingDate)</td>
-                <td>@Html.DisplayFor(modelItem => item.Publisher.PublisherName)</td>
+                <td>
+                    @{
+                        if (item.Publisher != null)
+                        {
+                            @item.Publisher.PublisherName
+                        }
+                    }
+                </td>
+                <td>
+                    @{
+                        if (item.BookCategories != null)
+                        {
+                            foreach (var category in item.BookCategories)
+                            {
+                                @category.Category.ID
+                                @: @category.Category.CategoryName <br />
+                            }
+                        }
+                    }
+                </td>
                 <td>
                     <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
                     <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
