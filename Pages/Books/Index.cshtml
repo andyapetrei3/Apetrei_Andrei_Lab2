@@ -7,14 +7,35 @@
 
 <h1>Books</h1>
 
+<!-- AICI AM ADĂUGAT FORMULARUL DE CĂUTARE (Punctul 13) -->
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by Title or Author:
+            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <input type="submit" value="Search" class="btn btn-primary" /> |
+            <a asp-page="./Index">Back to full List</a>
+        </p>
+    </div>
+</form>
+
 <p>
     <a asp-page="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>Book Title</th>
-            <th>Author</th>
+            <!-- AICI AM ADĂUGAT LINK-URILE DE SORTARE (Punctul 10) -->
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.TitleSort">
+                    @Html.DisplayNameFor(model => model.Book[0].Title)
+                </a>
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.AuthorSort">
+                    @Html.DisplayNameFor(model => model.Book[0].Author)
+                </a>
+            </th>
             <th>Price</th>
             <th>Publishing Date</th>
             <th>Publisher</th>
@@ -31,8 +52,7 @@
                     @{
                         if (item.Author != null)
                         {
-                            @item.Author.LastName
-                            @: @item.Author.FirstName
+                            @item.Author.FullName
                         }
                     }
                 </td>

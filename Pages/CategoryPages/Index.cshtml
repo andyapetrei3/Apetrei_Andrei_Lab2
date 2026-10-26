@@ -1,4 +1,4 @@
-@page
+@page "{id:int?}"
 @model Apetrei_Andrei_Lab2.Pages.CategoryPages.IndexModel
 
 @{
@@ -10,35 +10,30 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
             <th>Category Name</th>
-            <th>Book Categories</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Category)
+        <!-- Am schimbat Model.Category în Model.CategoryData.Categories -->
+        @foreach (var item in Model.CategoryData.Categories)
         {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
+            string selectedRow = "";
+            if (item.ID == Model.CategoryID)
+            {
+                selectedRow = "table-success"; // Rândul selectat devine verde
+            }
+            <tr class="@selectedRow">
                 <td>
-                    @{
-                        if (item.BookCategories != null)
-                        {
-                            foreach (var bookCat in item.BookCategories)
-                            {
-                                if (bookCat.Book != null)
-                                {
-                                    @bookCat.Book.Title
-                                    <br />
-                                }
-                            }
-                        }
-                    }
+                    @Html.DisplayFor(modelItem => item.CategoryName)
                 </td>
                 <td>
+                    <!-- Am adăugat aici butonul Select -->
+                    <a asp-page="./Index" asp-route-id="@item.ID">Select</a> |
                     <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
                     <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
                     <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
@@ -47,3 +42,31 @@
         }
     </tbody>
 </table>
+
+<!-- Tabelul secundar care apare doar când e selectată o categorie -->
+@if (Model.CategoryData.Books != null)
+{
+    <h3>Books in Selected Category</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in Model.CategoryData.Books)
+            {
+                <tr>
+                    <td>@book.Title</td>
+                    <td>
+                        @if (book.Author != null)
+                        {
+                            @book.Author.FullName
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

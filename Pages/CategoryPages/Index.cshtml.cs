@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Apetrei_Andrei_Lab2.Models;
+using Apetrei_Andrei_Lab2.Models.ViewModels; // Am adăugat acest using
+using System.Linq;
 
 namespace Apetrei_Andrei_Lab2.Pages.CategoryPages
 {
@@ -13,14 +15,34 @@ namespace Apetrei_Andrei_Lab2.Pages.CategoryPages
             _context = context;
         }
 
-        public IList<Category> Category { get; set; } = default!;
+        public CategoryIndexData CategoryData { get; set; }
+        public int CategoryID { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int? id) // Am adăugat parametrul id
         {
-            Category = await _context.Category
+            CategoryData = new CategoryIndexData();
+
+            // Încărcăm categoriile cu tot cu cărți și autori
+            CategoryData.Categories = await _context.Category
                 .Include(c => c.BookCategories)
-                    .ThenInclude(b => b.Book)
+                    .ThenInclude(bc => bc.Book)
+                        .ThenInclude(b => b.Author) // Avem nevoie de autor pentru a-i afișa numele
+                .OrderBy(c => c.CategoryName)
                 .ToListAsync();
+
+            // Dacă s-a apăsat pe "Select"
+            if (id != null)
+            {
+                CategoryID = id.Value;
+                Category category = CategoryData.Categories
+                    .Where(c => c.ID == id.Value)
+                    .Single();
+
+                // Extragem doar cărțile categoriei selectate
+                CategoryData.Books = category.BookCategories
+                    .Select(bc => bc.Book)
+                    .ToList();
+            }
         }
     }
 }
