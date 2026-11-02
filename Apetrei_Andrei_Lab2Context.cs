@@ -8,4 +8,8 @@ public class Apetrei_Andrei_Lab2Context(DbContextOptions<Apetrei_Andrei_Lab2Cont
     public DbSet<Author> Author { get; set; } = default!;
     public DbSet<Category> Category { get; set; } = default!;
     public DbSet<BookCategory> BookCategory { get; set; } = default!;
+
+    public DbSet<Borrowing> Borrowing { get; set; } = default!;
+
+    public DbSet<Member> Member { get; set; } = default!;
 }

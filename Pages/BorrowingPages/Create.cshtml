@@ -1,0 +1,57 @@
+@page
+@model Apetrei_Andrei_Lab2.Pages.BorrowingPages.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Borrowing</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <!-- AM TRANSFORMAT ÎN LISTĂ DERULANTĂ PENTRU MEMBRU -->
+            <div class="form-group">
+                <label asp-for="Borrowing.MemberID" class="control-label">Member</label>
+                <select asp-for="Borrowing.MemberID" class="form-control" asp-items="ViewBag.MemberID">
+                    <option value="">-- Select Member --</option>
+                </select>
+                <span asp-validation-for="Borrowing.MemberID" class="text-danger"></span>
+            </div>
+
+            <!-- AM TRANSFORMAT ÎN LISTĂ DERULANTĂ PENTRU CARTE -->
+            <div class="form-group">
+                <label asp-for="Borrowing.BookID" class="control-label">Book</label>
+                <select asp-for="Borrowing.BookID" class="form-control" asp-items="ViewBag.BookID">
+                    <option value="">-- Select Book --</option>
+                </select>
+                <span asp-validation-for="Borrowing.BookID" class="text-danger"></span>
+            </div>
+
+            <!-- DATA RETURNĂRII (obligatorie) -->
+            <div class="form-group">
+                <label asp-for="Borrowing.ReturnDate" class="control-label">Return Date</label>
+                <input asp-for="Borrowing.ReturnDate" class="form-control" type="date" />
+                <span asp-validation-for="Borrowing.ReturnDate" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

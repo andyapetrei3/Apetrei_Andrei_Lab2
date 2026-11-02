@@ -11,15 +11,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Apetrei_Andrei_Lab2.Migrations
 {
     [DbContext(typeof(Apetrei_Andrei_Lab2Context))]
-    [Migration("20261019193224_BookCategoryModif")]
-    partial class BookCategoryModif
+    [Migration("20261102143125_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.13")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -101,6 +101,32 @@ namespace Apetrei_Andrei_Lab2.Migrations
                     b.ToTable("BookCategory");
                 });
 
+            modelBuilder.Entity("Apetrei_Andrei_Lab2.Models.Borrowing", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int?>("BookID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MemberID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReturnDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("BookID");
+
+                    b.HasIndex("MemberID");
+
+                    b.ToTable("Borrowing");
+                });
+
             modelBuilder.Entity("Apetrei_Andrei_Lab2.Models.Category", b =>
                 {
                     b.Property<int>("ID")
@@ -116,6 +142,35 @@ namespace Apetrei_Andrei_Lab2.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("Apetrei_Andrei_Lab2.Models.Member", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Adress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Member");
                 });
 
             modelBuilder.Entity("Apetrei_Andrei_Lab2.Models.Publisher", b =>
@@ -169,6 +224,21 @@ namespace Apetrei_Andrei_Lab2.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Apetrei_Andrei_Lab2.Models.Borrowing", b =>
+                {
+                    b.HasOne("Apetrei_Andrei_Lab2.Models.Book", "Book")
+                        .WithMany("Borrowings")
+                        .HasForeignKey("BookID");
+
+                    b.HasOne("Apetrei_Andrei_Lab2.Models.Member", "Member")
+                        .WithMany("Borrowings")
+                        .HasForeignKey("MemberID");
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Member");
+                });
+
             modelBuilder.Entity("Apetrei_Andrei_Lab2.Models.Author", b =>
                 {
                     b.Navigation("Books");
@@ -177,11 +247,18 @@ namespace Apetrei_Andrei_Lab2.Migrations
             modelBuilder.Entity("Apetrei_Andrei_Lab2.Models.Book", b =>
                 {
                     b.Navigation("BookCategories");
+
+                    b.Navigation("Borrowings");
                 });
 
             modelBuilder.Entity("Apetrei_Andrei_Lab2.Models.Category", b =>
                 {
                     b.Navigation("BookCategories");
+                });
+
+            modelBuilder.Entity("Apetrei_Andrei_Lab2.Models.Member", b =>
+                {
+                    b.Navigation("Borrowings");
                 });
 
             modelBuilder.Entity("Apetrei_Andrei_Lab2.Models.Publisher", b =>
