@@ -30,21 +30,17 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Authors/Index">Authors</a>
                         </li>
-                        
-                        <!-- AICI AM ADĂUGAT MEMBERS ȘI BORROWINGS -->
                         <li class="nav-item">
-                            <!-- Verifică dacă folderul se numește MemberPages sau Members -->
                             <a class="nav-link text-dark" asp-area="" asp-page="/MemberPages/Index">Members</a>
                         </li>
                         <li class="nav-item">
-                            <!-- Verifică dacă folderul se numește BorrowingPages sau Borrowings -->
                             <a class="nav-link text-dark" asp-area="" asp-page="/BorrowingPages/Index">Borrowings</a>
                         </li>
-
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
                     </ul>
+                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
